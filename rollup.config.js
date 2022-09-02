@@ -6,12 +6,12 @@ export default {
     output: [{
         file: './dist/xeokit-bim-viewer.es.js',
         format: 'es',
-        name: 'bundle'
+        name: 'BIM'
     },
     {
         file: './dist/xeokit-bim-viewer.umd.js',
         format: 'umd',
-        name: 'bundle'
+        name: 'BIM'
     }],
     plugins: [
         nodeResolve(),
