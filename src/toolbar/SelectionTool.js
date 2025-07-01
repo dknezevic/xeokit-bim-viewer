@@ -3,6 +3,7 @@ import {Controller} from "../Controller.js";
 /** @private */
 class SelectionTool extends Controller {
 
+    selectedEntity;
     constructor(parent, cfg) {
 
         super(parent);
@@ -28,7 +29,15 @@ class SelectionTool extends Controller {
                     if (!pickResult.entity) {
                         return;
                     }
-                  pickResult.entity.selected = !pickResult.entity.selected;
+
+                    if (this.selectedEntity && this.selectedEntity !== pickResult.entity) {
+                        this.selectedEntity.selected = false;
+                    }
+
+                    if (!pickResult.entity.selected) {
+                        pickResult.entity.selected = true;
+                        this.selectedEntity = pickResult.entity;
+                    }
                 });
             } else {
                 buttonElement.classList.remove("active");
@@ -49,7 +58,7 @@ class SelectionTool extends Controller {
         });
 
         this.bimViewer.on("reset", () => {
-            this.setActive(false);
+            this.setActive(cfg.active === true);
         });
     }
 }

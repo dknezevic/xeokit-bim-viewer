@@ -188,6 +188,7 @@ class BIMViewer extends Controller {
      * @param {Boolean} [cfg.enableMeasurements=true] Set ````true```` to enable distance and angle measurements with the BIMViewer.
      * @param {Boolean} [cfg.keyboardEventsElement] Optional reference to HTML element on which key events should be handled. Defaults to the HTML Document.
      * @param {Node | undefined} [cfg.containerElement] Optional reference of an existing DOM Node (e.g. ShadowRoot), which encapsulates all HTML elements related to viewer plugins, defaults to ````document.body````. 
+     * @param {Boolean} [cfg.readableGeometryEnabled=false] Whether to enable full-precision accuracy when surface picking with {@link Scene#pick}. Note that when ````true````, this configuration will increase the amount of browser memory used by the Viewer. The ````pickSurfacePrecision```` option for ````Scene#pick```` only works if this is set ````true````.
      */
     constructor(server, cfg = {}) {
 
@@ -236,6 +237,7 @@ class BIMViewer extends Controller {
             saoEnabled: true,
             pbrEnabled: false,
             colorTextureEnabled: true,
+            readableGeometryEnabled: (!!cfg.readableGeometryEnabled),
 
 
             // Enhances the efficiency of SectionPlane creation by proactively allocating Viewer resources
@@ -394,7 +396,7 @@ class BIMViewer extends Controller {
 
         this._selectionTool = new SelectionTool(this, {
             buttonElement: toolbarElement.querySelector(".xeokit-select"),
-            active: false
+            active: true
         });
 
         this._marqueeSelectionTool = new MarqueeSelectionTool(this, {
@@ -474,6 +476,8 @@ class BIMViewer extends Controller {
             this._enableMeasurements ? this._measureDistanceTool : null,
             this._enableMeasurements ? this._measureAngleTool : null
         ]);
+
+        this._selectionTool.setActive(true);
 
         explorerElement.querySelector(".xeokit-showAllObjects").addEventListener("click", (event) => {
             this.setAllObjectsVisible(true);
